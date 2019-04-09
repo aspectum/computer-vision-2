@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 windowName = 'Janela'
+undistortedName = 'desdestorcido'
 board_h = 6
 board_w = 8
 board_sz = (board_w, board_h)
@@ -53,20 +54,24 @@ def main():
     print('-----------')
     print(distortion_matrix)
 
+    new_camera_matrix, roi = cv2.getOptimalNewCameraMatrix(instrinsic_matrix, distortion_matrix, (board_w, board_h), 1, (board_w, board_h))
+    mapx, mapy = cv2.initUndistortRectifyMap(instrinsic_matrix, distortion_matrix, None, new_camera_matrix, (board_w, board_h), 5)
 
-    # while cap.isOpened():
-    #     ret, frame = cap.read()
-    #     patternWasFound, corners = cv2.findChessboardCorners(frame, board_sz)
+    cv2.namedWindow(undistortedName)
+    
 
-    #     frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    #     # find cornerSubPix??
+    while cap.isOpened():
+        ret, frame = cap.read()
+        # dispFrame = cv2.remap(frame, mapx, mapy, cv2.INTER_LINEAR)
+        dispFrame = cv2.undistort(frame, instrinsic_matrix, distortion_matrix, None, new_camera_matrix)
 
-    #     frame_display = cv2.drawChessboardCorners(frame, board_sz, corners, patternWasFound)
+        #x,y,w,h = roi
+        #dispFrame = dispFrame[y:y+h, x:x+w]
 
-    #     cv2.imshow(windowName, frame_display)
+        cv2.imshow(undistortedName, dispFrame)
 
-    #     if cv2.waitKey(25) & 0xFF == ord('q'): 
-    #         break
+        if cv2.waitKey(25) & 0xFF == ord('q'): 
+            break
     
     cv2.destroyAllWindows()
 
