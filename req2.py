@@ -1,23 +1,24 @@
 import cv2
 import numpy as np
+import glob
 
 windowName = 'Janela'
-undistortedName = 'desdestorcido'
 board_h = 6
 board_w = 8
 board_sz = (board_w, board_h)
-n_boards = 5
+n_boards = 39       # Numero de imagens que ele vai pegar para a calibração
 board_total = board_w * board_h
-frame_step = 10
+frame_step = 41
 
 objp = np.zeros((6*8,3), np.float32)
-objp[:,:2] = np.mgrid[0:8,0:6].T.reshape(-1,2)
+objp[:,:2] = np.mgrid[0:8,0:6].T.reshape(-1,2)      # "Coordenadas do mundo real" do tabuleiro de xadrez
+# objp = 2.8 * objp     #--> Colocar o lado do quadrado parece não influenciar nada o resultado.
 
 image_points = []
 object_points = []
 
 def main():
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture('data/video.mp4')
     if (cap.isOpened()== False):  
         print("Error opening video file") 
     cv2.namedWindow(windowName)
@@ -28,18 +29,17 @@ def main():
     while successes < n_boards:
         ret, frame = cap.read()
         frame_count += 1
-        if frame_count % frame_step == 0:
+        if frame_count % frame_step == 0:       # Pula frames do vídeo
             patternWasFound, corners = cv2.findChessboardCorners(frame, board_sz)
             
-            if patternWasFound:
+            if patternWasFound:         # Se achou o tabuleiro
                 frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                # find cornerSubPix??
 
                 frame_display = cv2.drawChessboardCorners(frame, board_sz, corners, patternWasFound)
 
-                if len(corners) == board_total:
-                    image_points.append(corners)
-                    object_points.append(objp)
+                if len(corners) == board_total:     # Se achou todos os pontos na imagem
+                    image_points.append(corners)    # Coordenadas no espaço da imagem
+                    object_points.append(objp)      # Coordenadas no mundo real (sempre o mesmo (?))
                     successes += 1
             else:
                 frame_display = frame.copy()
@@ -48,31 +48,18 @@ def main():
         if cv2.waitKey(25) & 0xFF == ord('q'): 
             break
         cv2.imshow(windowName, frame)
-    retVal, instrinsic_matrix, distortion_matrix, rvecs, tvecs = cv2.calibrateCamera(object_points, image_points, frame.shape[:-1], None, None)
-
-    print(instrinsic_matrix)
-    print('-----------')
-    print(distortion_matrix)
-
-    new_camera_matrix, roi = cv2.getOptimalNewCameraMatrix(instrinsic_matrix, distortion_matrix, (board_w, board_h), 1, (board_w, board_h))
-    mapx, mapy = cv2.initUndistortRectifyMap(instrinsic_matrix, distortion_matrix, None, new_camera_matrix, (board_w, board_h), 5)
-
-    cv2.namedWindow(undistortedName)
     
+    # Função que faz a calibração
+    retVal, intrinsics_matrix, distortion_matrix, rvecs, tvecs = cv2.calibrateCamera(object_points, image_points, frame.shape[:-1], None, None)
 
-    while cap.isOpened():
-        ret, frame = cap.read()
-        # dispFrame = cv2.remap(frame, mapx, mapy, cv2.INTER_LINEAR)
-        dispFrame = cv2.undistort(frame, instrinsic_matrix, distortion_matrix, None, new_camera_matrix)
+    # Salva os .xml com os parâmetros do requisito 2
+    intrinsics_file = cv2.FileStorage('intrinsics.xml', flags = 1)
+    distortion_file = cv2.FileStorage('distortion.xml', flags = 1)
+    intrinsics_file.write(name = 'intrinsics', val = intrinsics_matrix)
+    distortion_file.write(name = 'distortion', val = distortion_matrix)
+    intrinsics_file.release()
+    distortion_file.release()
 
-        #x,y,w,h = roi
-        #dispFrame = dispFrame[y:y+h, x:x+w]
-
-        cv2.imshow(undistortedName, dispFrame)
-
-        if cv2.waitKey(25) & 0xFF == ord('q'): 
-            break
-    
     cv2.destroyAllWindows()
 
 
