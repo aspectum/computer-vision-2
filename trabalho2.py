@@ -20,10 +20,7 @@ def clickEvent(event, x, y, flags, param):
 		taxay = (pontosy[1] - pontosy[0])/1000
 		imagem2 = imagem.copy()
 		if pontosx[1] != -1:
-			for i in range(1000):
-				imagem2[int(pontosy[1]-i*taxay),int(pontosx[1]-i*taxax),2] = 0
-				imagem2[int(pontosy[1]-i*taxay),int(pontosx[1]-i*taxax),1] = 255
-				imagem2[int(pontosy[1]-i*taxay),int(pontosx[1]-i*taxax),0] = 0
+			cv2.line(imagem2,(pontosx[0],pontosy[0]),(pontosx[1],pontosy[1]),(0,255,0),2)
 			cv2.imshow('Imagem',imagem2)		
 
 
