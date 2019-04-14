@@ -14,9 +14,6 @@ class janelaClass:
         self.tvec = tvec
         self.rvec = rvec
 
-# pontosx = [-1,-1]
-# pontosy = [-1,-1]
-
 def realWordPoints(janela):
     camPts0 = [janela.pontosx[0], janela.pontosy[0], 1]
     camPts1 = [janela.pontosx[1], janela.pontosy[1], 1]
@@ -26,14 +23,6 @@ def realWordPoints(janela):
     mCamPts1 = np.dot(inv_intr, camPts1)
 
     rotMtx, jacob = cv2.Rodrigues(janela.rvec)
-
-    # print(janela.rvec.shape)
-    # print(janela.tvec.shape)
-    # print(rotMtx.shape)
-    # print(janela.tvec)
-    # print(rotMtx)
-
-
 
     w2cMtx = np.concatenate([rotMtx, janela.tvec], 1)
     inv_w2cMtx = np.linalg.pinv(w2cMtx)
@@ -47,8 +36,6 @@ def realWordPoints(janela):
     dist = np.linalg.norm(wPts1 - wPts0)
 
     print(janela.windowname, "- Distancia: ", dist)
-
-
 
 
 def clickEvent(event, x, y, flags, janela):
