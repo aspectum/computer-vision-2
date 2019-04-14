@@ -5,7 +5,7 @@ import math
 pontosx = [-1,-1]
 pontosy = [-1,-1]
 
-def clickEvent(event, x, y, flags, param):
+def clickEvent(event, x, y, flags, imagem):
 	global pontosx,pontosy
 	if event == cv2.EVENT_LBUTTONDOWN:
 		pontosx[1] = pontosx[0]
@@ -22,11 +22,10 @@ def clickEvent(event, x, y, flags, param):
 			cv2.imshow('Imagem',imagem2)		
 
 def main():
-	global imagem, imagem2
 	imagem = cv2.imread('data/a.jpg')
 	imagem2 = imagem.copy()
 	cv2.imshow('Imagem',imagem2)
-	cv2.setMouseCallback('Imagem', clickEvent)
+	cv2.setMouseCallback('Imagem', clickEvent, imagem)
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
 
