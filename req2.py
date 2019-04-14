@@ -11,7 +11,7 @@ def main():
 
     objp = np.zeros((6*8,3), np.float32)
     objp[:,:2] = np.mgrid[0:8,0:6].T.reshape(-1,2)      # "Coordenadas do mundo real" do tabuleiro de xadrez
-    objp = 2.8 * objp     #--> Colocar o lado do quadrado parece não influenciar nada o resultado.
+    objp = 2.789 * objp     #--> Colocar o lado do quadrado parece não influenciar nada o resultado.
 
     image_points = []
     object_points = []

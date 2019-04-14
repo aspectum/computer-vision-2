@@ -37,7 +37,7 @@ import math
 def calcExtrinsic(target):
     objp = np.zeros((6*8,3), np.float32)
     objp[:,:2] = np.mgrid[0:8,0:6].T.reshape(-1,2)
-    objp = 2.8 * objp     #--> Nesse código parece fazer diferença o tamanho do quadrado. 2.8cm seria o lado do quadrado
+    objp = 2.789 * objp     #--> Nesse código parece fazer diferença o tamanho do quadrado. 2.8cm seria o lado do quadrado
 
     # Carrega os parâmetros gerados pelo requisito 2
     intrinsics_file = cv2.FileStorage('intrinsics.xml', flags = 0)
