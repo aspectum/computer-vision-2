@@ -27,7 +27,7 @@ def main():
 	successes = 0
 	frame_count = 0
 	frame_names = []
-	images = glob.glob('data/*.jpg') # Carrega as imagens (1 a 30cm, 2 a 60cm e 3 a 90cm)
+	images = glob.glob('novas/*.jpg') # Carrega as imagens (1 a 30cm, 2 a 60cm e 3 a 90cm)
 	for fname in images:
 		frame_names.append(fname)
 		frame = cv2.imread(fname)
@@ -46,8 +46,9 @@ def main():
 				object_points.append(objp)      # Coordenadas no mundo real (sempre o mesmo (?))
 				successes += 1
 			else: 
-				print("Este frame nao achou o padrao:",frame_count)
+				print("Este frame nao achou o padrao corretamente:",fname)
 		else:
+			print("Este frame nao achou o padrao:",fname)
 			frame_display = frame.copy()
 		# else:
 		# 	frame_display = frame.copy()
@@ -69,8 +70,8 @@ def main():
 	cv2.destroyAllWindows()
 
 	print("Distances from camera to pattern:")
-	for i in range(frame_count):
-		print(frame_names[i],": ",tvecs[i][2][0],sep="")
+	for i in range(successes):
+		print(frame_names[i],": ",tvecs[i][2][0],", ",rvecs[i][2][0],sep="")
 
 if __name__  == "__main__":
 	main()

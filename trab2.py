@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import math
-import req2, req3
+import req1, req2, req3
 
 def main():
 	menu = {}
@@ -18,7 +18,8 @@ def main():
 			print (entry, menu[entry])
 		selection=input("Selecione: ") 
 		if selection =='1': 
-			import req1			
+			req1.main()
+			print()		
 		elif selection =='2':
 			req2.main()
 			print()

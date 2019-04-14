@@ -28,7 +28,7 @@ def main():
 	intrinsics_file.release()
 	distortion_file.release()
 
-	images = glob.glob('data/*.jpg') # Carrega as imagens (1 a 30cm, 2 a 60cm e 3 a 90cm)
+	images = glob.glob('novas/*.jpg') # Carrega as imagens (1 a 30cm, 2 a 60cm e 3 a 90cm)
 	rots = []
 	transl = []
 	count=0
@@ -44,7 +44,7 @@ def main():
 		if ret == True:
 			img = cv2.drawChessboardCorners(img, (8,6), corners,ret)
 			cv2.imshow('img',img)
-			cv2.waitKey(500)
+			cv2.waitKey(100)
 		
 		# Calcula os "extrínsecos"? Pelo que eu endendi os extrínsecos são a matriz de rotação (vetor rvec) e o vetor de translação (tvec)
 		# que levam do espaço do mundo para o espaço da câmera. Então o tvec deveria fornecer a distância entre a câmera e o tabuleiro.
@@ -56,7 +56,7 @@ def main():
 
 	print("Distances from camera to pattern:")
 	for i in range(count):
-		print(frame_names[i],": ",transl[i][2][0],sep="")
+		print(frame_names[i],": ",transl[i][2][0],", ",rots[i][2][0],sep="")
 
 	cv2.destroyAllWindows()
 
