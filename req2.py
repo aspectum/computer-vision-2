@@ -7,9 +7,7 @@ def main():
 	board_h = 6
 	board_w = 8
 	board_sz = (board_w, board_h)
-	# n_boards = 39       # Numero de imagens que ele vai pegar para a calibração
 	board_total = board_w * board_h
-	frame_step = 41
 
 	objp = np.zeros((6*8,3), np.float32)
 	objp[:,:2] = np.mgrid[0:8,0:6].T.reshape(-1,2)      # "Coordenadas do mundo real" do tabuleiro de xadrez
@@ -18,27 +16,17 @@ def main():
 	image_points = []
 	object_points = []
 
-
-	# cap = cv2.VideoCapture('data/video.mp4')
-	# if (cap.isOpened()== False):  
-	# 	print("Error opening video file") 
-	# cv2.namedWindow(windowName)
-
 	successes = 0
-	frame_count = 0
 	frame_names = []
-	images = glob.glob('novas/*.jpg') # Carrega as imagens (1 a 30cm, 2 a 60cm e 3 a 90cm)
+	images = glob.glob('calib/*.jpg')
+
 	for fname in images:
 		frame_names.append(fname)
 		frame = cv2.imread(fname)
 		frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-		frame_count += 1
-		# if frame_count % frame_step == 0:       # Pula frames do vídeo
 		patternWasFound, corners = cv2.findChessboardCorners(frame, board_sz)
 		
 		if patternWasFound:         # Se achou o tabuleiro
-			# frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-			# cv2.imwrite("frames/frame%d.jpg" % frame_count, frame) 
 			frame_display = cv2.drawChessboardCorners(frame, board_sz, corners, patternWasFound)
 
 			if len(corners) == board_total:     # Se achou todos os pontos na imagem
@@ -50,8 +38,7 @@ def main():
 		else:
 			print("Este frame nao achou o padrao:",fname)
 			frame_display = frame.copy()
-		# else:
-		# 	frame_display = frame.copy()
+
 		if cv2.waitKey(25) & 0xFF == ord('q'): 
 			break
 		cv2.imshow(windowName, frame)
