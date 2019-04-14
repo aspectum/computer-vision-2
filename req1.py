@@ -21,12 +21,14 @@ def clickEvent(event, x, y, flags, param):
 			cv2.line(imagem2,(pontosx[0],pontosy[0]),(pontosx[1],pontosy[1]),(0,0,255),4)
 			cv2.imshow('Imagem',imagem2)		
 
+def main():
+	global imagem, imagem2
+	imagem = cv2.imread('data/a.jpg')
+	imagem2 = imagem.copy()
+	cv2.imshow('Imagem',imagem2)
+	cv2.setMouseCallback('Imagem', clickEvent)
+	cv2.waitKey(0)
+	cv2.destroyAllWindows()
 
-imagem = cv2.imread('data/a.jpg')
-imagem2 = imagem.copy()
-cv2.imshow('Imagem',imagem2)
-cv2.setMouseCallback('Imagem', clickEvent)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-
-# input()
+if __name__  == "__main__":
+	main()
