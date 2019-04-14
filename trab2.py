@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import math
-import req1, req2, req3
+import req1, req2, req3, req4
 
 def main():
 	menu = {}
@@ -27,7 +27,8 @@ def main():
 			req3.main()
 			print()
 		elif selection =='4': 
-			pass
+			req4.main()
+			print()
 		elif selection == '5': 
 			break
 		else: 
