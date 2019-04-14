@@ -34,24 +34,11 @@ import math
  
 #     return np.array([x, y, z])
 
-
-
-def main():
-    windowName = 'Janela'
-    undistortedName = 'desdestorcido'
-    board_h = 6
-    board_w = 8
-    board_sz = (board_w, board_h)
-    n_boards = 40
-    board_total = board_w * board_h
-    frame_step = 40
-
+def calcExtrinsic(target):
     objp = np.zeros((6*8,3), np.float32)
     objp[:,:2] = np.mgrid[0:8,0:6].T.reshape(-1,2)
     objp = 2.8 * objp     #--> Nesse código parece fazer diferença o tamanho do quadrado. 2.8cm seria o lado do quadrado
 
-    image_points = []
-    object_points = []
     # Carrega os parâmetros gerados pelo requisito 2
     intrinsics_file = cv2.FileStorage('intrinsics.xml', flags = 0)
     distortion_file = cv2.FileStorage('distortion.xml', flags = 0)
@@ -62,7 +49,7 @@ def main():
     intrinsics_file.release()
     distortion_file.release()
 
-    images = glob.glob('test/*.jpg') # Carrega as imagens (1 a 30cm, 2 a 60cm e 3 a 90cm)
+    images = glob.glob(target) # Carrega as imagens (1 a 30cm, 2 a 60cm e 3 a 90cm)
     rots = []
     transl = []
     count=0
@@ -83,6 +70,12 @@ def main():
         retval, rvec, tvec = cv2.solvePnP(objp, corners, intrinsics_matrix, distortion_matrix)
         rots.append(rvec)
         transl.append(tvec)
+    cv2.destroyAllWindows()
+    return frame_names, transl, rots
+
+def main():
+    
+    frame_names, transl, rots = calcExtrinsic('test/*.jpg')
 
     # angs = []
     # for i in range(count):
@@ -92,8 +85,8 @@ def main():
 
 
     print("Distances from camera to pattern:")
-    for i in range(count):
-        print(frame_names[i],": ",transl[i],", ",rots[i],sep="")
+    for i in range(len(frame_names)):
+        print(frame_names[i],": ",transl[i][2],", ",rots[i][2],sep="")
 
     cv2.destroyAllWindows()
 

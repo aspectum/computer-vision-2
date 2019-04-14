@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import glob
 import math
+import req3
 
 class janelaClass:
     def __init__(self, imagem, windowname, intrinsics, tvec, rvec):
@@ -51,22 +52,17 @@ def realWordPoints(janela):
 
 
 def clickEvent(event, x, y, flags, janela):
-    # global pontosx,pontosy
     if event == cv2.EVENT_LBUTTONDOWN:
         janela.pontosx[1] = janela.pontosx[0]
         janela.pontosx[0] = x
         janela.pontosy[1] = janela.pontosy[0]
         janela.pontosy[0] = y
-        # print ('Point 1: X = ',pontosy[1] ,'Y = ', pontosx[1])
-        # print ('Point 2: X = ',pontosy[0] ,'Y = ', pontosx[0])
         if janela.pontosx[1]!=-1:
-            # distEucl = math.sqrt((janela.pontosx[0]-janela.pontosx[1])**2 + (janela.pontosy[0]-janela.pontosy[1])**2)
             realWordPoints(janela)
-            #print ("Pixel distance:",distEucl)
             imagem2 = janela.imagem.copy()
             cv2.line(imagem2,(janela.pontosx[0],janela.pontosy[0]),(janela.pontosx[1],janela.pontosy[1]),(0,0,255),4)
             cv2.imshow(janela.windowname,imagem2)
-            janela.pontosx = [-1,-1]		# Não sei se assim fica melhor
+            janela.pontosx = [-1,-1]
             janela.pontosy = [-1,-1]	
 
 def main():
@@ -80,7 +76,10 @@ def main():
     distortion_file.release()
 
 
-    image_name = 'test/IMG_20190414_142327.jpg'
+    image_name = 'test/IMG_20190414_142402.jpg'
+
+    frame_names, transl, rots = req3.calcExtrinsic(image_name)
+
     raw = cv2.imread(image_name)
 
     h,  w = raw.shape[:2]
@@ -90,23 +89,12 @@ def main():
     x,y,w,h = roi
     undistorted = undistorted[y:y+h, x:x+w]
 
-    # raw2 = raw.copy()
-    # undistorted2 = undistorted.copy()
-    # for i in range(150):
-    #     cv2.imshow('compara', raw)
-    #     if cv2.waitKey(200) & 0xFF == ord('q'): 
-    #         break
-    #     cv2.imshow('compara', undistorted)
-    #     if cv2.waitKey(200) & 0xFF == ord('q'): 
-    #         break
-    # cv2.destroyAllWindows()
-
     cv2.imshow('RAW',raw)
-    janelaRAW = janelaClass(raw, 'RAW', intrinsics_matrix, np.array([[-8.35795609], [-7.28281899], [59.44024499]]), np.array([[ 0.03952492], [-0.00419903], [ 0.01231298]]))
+    janelaRAW = janelaClass(raw, 'RAW', intrinsics_matrix, transl[0], rots[0])
     cv2.setMouseCallback('RAW', clickEvent, janelaRAW)
 
     cv2.imshow('UNDISTORTED',undistorted)
-    janelaUND = janelaClass(undistorted, 'UNDISTORTED', intrinsics_matrix, np.array([[-8.35795609], [-7.28281899], [59.44024499]]), np.array([[ 0.03952492], [-0.00419903], [ 0.01231298]]))
+    janelaUND = janelaClass(undistorted, 'UNDISTORTED', intrinsics_matrix, transl[0], rots[0])
     cv2.setMouseCallback('UNDISTORTED', clickEvent, janelaUND)
 
     cv2.waitKey(0)
