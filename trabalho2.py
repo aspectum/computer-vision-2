@@ -12,8 +12,8 @@ def clickEvent(event, x, y, flags, param):
 		pontosx[0] = x
 		pontosy[1] = pontosy[0]
 		pontosy[0] = y
-		print ('Ponto 1: X = ',pontosy[1] ,'Y = ', pontosx[1])
-		print ('Ponto 2: X = ',pontosy[0] ,'Y = ', pontosx[0])
+# 		print ('Ponto 1: X = ',pontosy[1] ,'Y = ', pontosx[1])
+# 		print ('Ponto 2: X = ',pontosy[0] ,'Y = ', pontosx[0])
 		distEucl = math.sqrt((pontosx[0]-pontosx[1])**2 + (pontosy[0]-pontosy[1])**2)
 		print (distEucl)
 		taxax = (pontosx[1] - pontosx[0])/1000
