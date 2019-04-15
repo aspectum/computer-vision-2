@@ -108,5 +108,5 @@ camera_calibration.cpp
 .vscode
 *.xml
 data/
-test/
-calib/
+# test/
+# calib/
