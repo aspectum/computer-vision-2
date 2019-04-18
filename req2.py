@@ -11,10 +11,11 @@ def main():
 
     objp = np.zeros((6*8,3), np.float32)
     objp[:,:2] = np.mgrid[0:8,0:6].T.reshape(-1,2)      # "Coordenadas do mundo real" do tabuleiro de xadrez
-    objp = 2.789 * objp     #--> Colocar o lado do quadrado parece não influenciar nada o resultado.
+    objp = 2.789 * objp     # 2.789 é o tamanho do lado do quadrado
 
-    image_points = []
-    object_points = []
+    # Listas com as coordenadas dos cantos de cada imagem
+    image_points = []       # Coordenadas em pixels na imagem
+    object_points = []      # Coordenadas em cm no mundo real
 
     successes = 0
     frame_names = []
@@ -22,12 +23,14 @@ def main():
 
     print("Iniciando a calibracao")
 
+    # Itera por todas as imagens
     for fname in images:
         frame_names.append(fname)
         frame = cv2.imread(fname)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
         patternWasFound, corners = cv2.findChessboardCorners(frame, board_sz)
-        
+
         if patternWasFound:         # Se achou o tabuleiro
             frame_display = cv2.drawChessboardCorners(frame, board_sz, corners, patternWasFound)
 
@@ -35,13 +38,13 @@ def main():
                 image_points.append(corners)    # Coordenadas no espaço da imagem
                 object_points.append(objp)      # Coordenadas no mundo real (sempre o mesmo (?))
                 successes += 1
-            else: 
+            else:
                 print("Este frame nao achou o padrao corretamente:",fname)
         else:
             print("Este frame nao achou o padrao:",fname)
             frame_display = frame.copy()
 
-        if cv2.waitKey(25) & 0xFF == ord('q'): 
+        if cv2.waitKey(25) & 0xFF == ord('q'):
             break
         cv2.imshow(windowName, frame)
 
@@ -53,12 +56,15 @@ def main():
     # Salva os .xml com os parâmetros do requisito 2
     intrinsics_file = cv2.FileStorage('intrinsics.xml', flags = 1)
     distortion_file = cv2.FileStorage('distortion.xml', flags = 1)
+
     intrinsics_file.write(name = 'intrinsics', val = intrinsics_matrix)
     distortion_file.write(name = 'distortion', val = distortion_matrix)
+
     intrinsics_file.release()
     distortion_file.release()
 
     cv2.destroyAllWindows()
+
 
 if __name__  == "__main__":
     main()
