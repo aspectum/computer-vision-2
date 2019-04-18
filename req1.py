@@ -26,7 +26,8 @@ def clickEvent(event, x, y, flags, janela):
             janela.pontosy = [-1,-1]		
 
 def main():
-    imagem = cv2.imread('data/a.jpg')
+    print("Clique em 2 pontos da imagem")
+    imagem = cv2.imread('test/c_30_01.jpg')
     cv2.imshow('Imagem',imagem)
     janela1 = janela(imagem, 'Imagem')
     cv2.setMouseCallback('Imagem', clickEvent, janela1)

@@ -10,13 +10,14 @@ def main():
 	menu['3']="- Requisito 3"
 	menu['4']="- Requisito 4"
 	menu['5']="- Sair"
-
 	while True: 
+		print('-------MENU-------')
 		options=menu.keys()
 		options = sorted(menu)
 		for entry in options:
 			print (entry, menu[entry])
 		selection=input("Selecione: ") 
+		print('------------------')
 		if selection =='1': 
 			req1.main()
 			print()		

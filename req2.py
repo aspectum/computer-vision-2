@@ -18,7 +18,9 @@ def main():
 
     successes = 0
     frame_names = []
-    images = glob.glob('calib/*.jpg')
+    images = sorted(glob.glob('calib/*.jpg'))
+
+    print("Iniciando a calibracao")
 
     for fname in images:
         frame_names.append(fname)
@@ -46,6 +48,8 @@ def main():
     # Função que faz a calibração
     retVal, intrinsics_matrix, distortion_matrix, rvecs, tvecs = cv2.calibrateCamera(object_points, image_points, frame.shape[::-1], None, None)
 
+    print("Calibracao concluida, salvando os parametros nos arquivos xml")
+
     # Salva os .xml com os parâmetros do requisito 2
     intrinsics_file = cv2.FileStorage('intrinsics.xml', flags = 1)
     distortion_file = cv2.FileStorage('distortion.xml', flags = 1)
@@ -55,10 +59,6 @@ def main():
     distortion_file.release()
 
     cv2.destroyAllWindows()
-
-    print("Distances from camera to pattern:")
-    for i in range(successes):
-        print(frame_names[i],": ",tvecs[i][2][0],", ",rvecs[i][2][0],sep="")
 
 if __name__  == "__main__":
     main()

@@ -3,7 +3,7 @@ import numpy as np
 import glob
 import math
 
-def calcExtrinsic(target):
+def calcExtrinsic(target, flagShow):
     objp = np.zeros((6*8,3), np.float32)
     objp[:,:2] = np.mgrid[0:8,0:6].T.reshape(-1,2)
     objp = 2.789 * objp 
@@ -18,7 +18,7 @@ def calcExtrinsic(target):
     intrinsics_file.release()
     distortion_file.release()
 
-    images = glob.glob(target)
+    images = sorted(glob.glob(target))
     rots = []
     transl = []
     frame_names = []
@@ -29,8 +29,8 @@ def calcExtrinsic(target):
 
         ret, corners = cv2.findChessboardCorners(gray, (8,6),None)
 
-        if ret == True:
-            img = cv2.drawChessboardCorners(img, (8,6), corners,ret)
+        if ret == True and flagShow == True:
+            img = cv2.drawChessboardCorners(gray, (8,6), corners,ret)
             cv2.imshow('img',img)
             cv2.waitKey(100)
         
@@ -42,11 +42,24 @@ def calcExtrinsic(target):
 
 def main():
     
-    frame_names, transl, rots = calcExtrinsic('test/*.jpg')
+    print("Iniciando a calibracao dos extrinsecos")
+    frame_names, transl, rots = calcExtrinsic('calib/n_*.jpg', True)
 
-    print("Distances from camera to pattern:")
-    for i in range(len(frame_names)):
-        print(frame_names[i],": ",transl[i][2],", ",rots[i][2],sep="")
+    print("Extrinsecos obtidos. Distancias medidas:")
+
+    dists = np.squeeze(transl)[:,2]
+    print("Para 38 cm:")
+    print("Media: ", np.mean(dists[0:10]))
+    print("Desvio: ", np.std(dists[0:10]))
+    print('')
+    print("Para 68 cm:")
+    print("Media: ", np.mean(dists[10:20]))
+    print("Desvio: ", np.std(dists[10:20]))
+    print('')
+    print("Para 98 cm:")
+    print("Media: ", np.mean(dists[20:30]))
+    print("Desvio: ", np.std(dists[20:30]))
+ 
 
     cv2.destroyAllWindows()
 
