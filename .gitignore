@@ -110,3 +110,5 @@ camera_calibration.cpp
 data/
 # test/
 # calib/
+*.txt
+c_example/
