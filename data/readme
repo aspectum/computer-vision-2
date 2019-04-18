@@ -1,1 +1,0 @@
-Experimentalmente, colocando mais imagens PIORA os resultados. Experimente calibrar utilizando a pasta frames (edite para:  images = glob.glob('frames/*.jpg'  )
