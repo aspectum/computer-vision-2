@@ -30,5 +30,10 @@ Luis_Marques__Pedro_Garcia
 │   └── req4.py
 └── /data
     ├── /test
-    └── /calib
+    ├── /calib
+    ├── distortion.xml
+    └── intrinsics.xml
 ```
+
+## Observações
+* São fornecidos arquivos intrínsecos, mas o programa os gera normalmente.

@@ -19,7 +19,7 @@ def main():
 
     successes = 0
     frame_names = []
-    images = sorted(glob.glob('calib/*.jpg'))
+    images = sorted(glob.glob('../data/calib/*.jpg'))
 
     print("Iniciando a calibracao")
 
@@ -54,8 +54,8 @@ def main():
     print("Calibracao concluida, salvando os parametros nos arquivos xml")
 
     # Salva os .xml com os parâmetros do requisito 2
-    intrinsics_file = cv2.FileStorage('intrinsics.xml', flags = 1)
-    distortion_file = cv2.FileStorage('distortion.xml', flags = 1)
+    intrinsics_file = cv2.FileStorage('../data/intrinsics.xml', flags = 1)
+    distortion_file = cv2.FileStorage('../data/distortion.xml', flags = 1)
 
     intrinsics_file.write(name = 'intrinsics', val = intrinsics_matrix)
     distortion_file.write(name = 'distortion', val = distortion_matrix)

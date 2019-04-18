@@ -33,7 +33,7 @@ def clickEvent(event, x, y, flags, janela):
 
 def main():
     print("Clique em 2 pontos da imagem")
-    imagem = cv2.imread('test/c_30_01.jpg')
+    imagem = cv2.imread('../data/test/c_30_01.jpg')
     cv2.imshow('Imagem',imagem)
     janela1 = janela(imagem, 'Imagem')
     cv2.setMouseCallback('Imagem', clickEvent, janela1)

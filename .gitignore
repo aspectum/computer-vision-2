@@ -107,8 +107,8 @@ build_all.sh
 camera_calibration.cpp
 .vscode
 *.xml
-data/
 # test/
 # calib/
 *.txt
 c_example/
+IMAGENS/

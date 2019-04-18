@@ -11,8 +11,8 @@ def calcExtrinsic(target, flagShow):
     objp = 2.789 * objp
 
     # Carrega os parâmetros gerados pelo requisito 2
-    intrinsics_file = cv2.FileStorage('intrinsics.xml', flags = 0)
-    distortion_file = cv2.FileStorage('distortion.xml', flags = 0)
+    intrinsics_file = cv2.FileStorage('../data/intrinsics.xml', flags = 0)
+    distortion_file = cv2.FileStorage('../data/distortion.xml', flags = 0)
 
     intrinsics_matrix = intrinsics_file.getNode('intrinsics').mat()
     distortion_matrix = distortion_file.getNode('distortion').mat()
@@ -51,7 +51,7 @@ def calcExtrinsic(target, flagShow):
 def main():
 
     print("Iniciando a calibracao dos extrinsecos")
-    frame_names, transl, rots = calcExtrinsic('calib/n_*.jpg', True)
+    frame_names, transl, rots = calcExtrinsic('../data/calib/n_*.jpg', True)
 
     print("Extrinsecos obtidos. Distancias medidas:")
 

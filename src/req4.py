@@ -85,11 +85,11 @@ def main():
 
     print("Para cada imagem, selecione as extremidades da caneta")
 
-    test_samples = ['test/c_30*.jpg', 'test/c_60*.jpg', 'test/c_90*.jpg', 'test/p_30*.jpg', 'test/p_60*.jpg', 'test/p_90*.jpg']
+    test_samples = ['../data/test/c_30*.jpg', '../data/test/c_60*.jpg', '../data/test/c_90*.jpg', '../data/test/p_30*.jpg', '../data/test/p_60*.jpg', '../data/test/p_90*.jpg']
     lengths = np.zeros((2, 2, 3, 3)) # [raw/undist], [center/perif], [38/68/98], [3 samples]
 
-    intrinsics_file = cv2.FileStorage('intrinsics.xml', flags = 0)
-    distortion_file = cv2.FileStorage('distortion.xml', flags = 0)
+    intrinsics_file = cv2.FileStorage('../data/intrinsics.xml', flags = 0)
+    distortion_file = cv2.FileStorage('../data/distortion.xml', flags = 0)
 
     intrinsics_matrix = intrinsics_file.getNode('intrinsics').mat()
     distortion_matrix = distortion_file.getNode('distortion').mat()
@@ -103,11 +103,11 @@ def main():
 
         # Decide os extrínsecos que vai usar
         if i % 3 == 0:
-            image_extrinsic = 'calib/n_30*.jpg'
+            image_extrinsic = '../data/calib/n_30*.jpg'
         elif i % 3 ==1:
-            image_extrinsic = 'calib/n_60*.jpg'
+            image_extrinsic = '../data/calib/n_60*.jpg'
         else:
-            image_extrinsic = 'calib/n_90*.jpg'
+            image_extrinsic = '../data/calib/n_90*.jpg'
 
         # Calcula os extrínsecos
         frame_names, transl, rots = req3.calcExtrinsic(image_extrinsic, False)
